@@ -11,22 +11,23 @@ Step 3: Convert audit userid fields from int to string so the first part of CURR
 Step 4: Create an audit table, triggers for insert, update, and delete, and events to truncate every month        
 */
 
+DROP TRIGGER IF EXISTS campus_id_before_insert;
+
 DELIMITER //
 
 CREATE TRIGGER campus_id_before_insert
 	BEFORE INSERT ON user
 	FOR EACH ROW
 BEGIN 
+	DECLARE prefix_id   VARCHAR(255);
+    DECLARE max_suffix  VARCHAR(255);
+    
 	SET prefix_id = CONCAT(LOWER(SUBSTRING(NEW.first_name, 1, 2)), LOWER(SUBSTRING(NEW.last_name, 1, 4)));
 	
     SELECT MAX(CAST(SUBSTRING(campus_id, LENGTH(prefix_id)+1, 1) AS UNSIGNED))
     INTO max_suffix
     FROM user
-    WHERE campus_id LIKE (prefix_id, '%');
-    /*
-    IF max_suffix IS NULL THEN
-		continue
-	END IF;
-	*/	
+    WHERE campus_id LIKE CONCAT(prefix_id, '%');
+    
 END//
     
