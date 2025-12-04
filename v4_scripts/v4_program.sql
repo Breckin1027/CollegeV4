@@ -34,6 +34,8 @@ BEGIN
     
     SET NEW.campus_id = CONCAT(prefix_id, max_suffix+1);
     SET NEW.campus_email = CONCAT(prefix_id, max_suffix+1, "@wsc.edu");
+    SET NEW.first_name = CONCAT(UPPER(LEFT(NEW.first_name,1)), LOWER(SUBSTRING(NEW.first_name,2)));
+    SET NEW.last_name = CONCAT(UPPER(LEFT(NEW.last_name,1)), LOWER(SUBSTRING(NEW.last_name,2)));
     
     SET NEW.created = NOW();
     SET NEW.updated = NOW();
@@ -62,6 +64,8 @@ BEGIN
     
     SET NEW.campus_id = CONCAT(prefix_id, max_suffix+1);
     SET NEW.campus_email = CONCAT(prefix_id, max_suffix+1, "@wsc.edu");
+	SET NEW.first_name = CONCAT(UPPER(LEFT(NEW.first_name,1)), LOWER(SUBSTRING(NEW.first_name,2)));
+    SET NEW.last_name = CONCAT(UPPER(LEFT(NEW.last_name,1)), LOWER(SUBSTRING(NEW.last_name,2)));
     
     SET NEW.updated = NOW();
     SET NEW.updated_userid = CURRENT_USER();
