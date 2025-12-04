@@ -8,13 +8,16 @@ Complete:
 		For this, use an insert trigger to maintain these two new columns
 	Step 3: Convert audit userid fields from int to string so the first part of CURRENT_USER can be stored
 		Use an insert and update triggers to maintain these columns
+		Include logic to standardize data, like gender being upper case F/M/X
+        
 To Do:
-        Include logic to standardize data, like gender being upper case F/M/X
 	Step 4: Create an audit table, triggers for insert, update, and delete, and events to truncate every month        
 */
 
 DROP TRIGGER IF EXISTS campus_id_before_insert;
 DROP TRIGGER IF EXISTS campus_id_before_update;
+DROP TRIGGER IF EXISTS campus_id_after_insert;
+DROP TRIGGER IF EXISTS campus_id_after_update;
 
 DELIMITER //
 
@@ -46,8 +49,6 @@ BEGIN
 END//
 
 
-DELIMITER //
-
 CREATE TRIGGER campus_id_before_update
 	BEFORE UPDATE ON user
     FOR EACH ROW
@@ -70,4 +71,20 @@ BEGIN
     SET NEW.updated = NOW();
     SET NEW.updated_userid = CURRENT_USER();
     
+END //
+
+
+CREATE TRIGGER campus_id_after_insert
+	AFTER INSERT ON user
+    FOR EACH ROW
+BEGIN
+	
+END //
+
+
+CREATE TRIGGER campus_id_after_update
+	AFTER UPDATE ON user
+    FOR EACH ROW
+BEGIN 
+
 END //
