@@ -26,17 +26,20 @@ BEGIN
     DECLARE max_suffix  VARCHAR(255);
     
 	SET prefix_id = CONCAT(LOWER(SUBSTRING(NEW.first_name, 1, 2)), LOWER(SUBSTRING(NEW.last_name, 1, 4)));
+	
+    SELECT MAX(CAST(SUBSTRING(campus_id, LENGTH(prefix_id)+1, 1) AS UNSIGNED))
+    INTO max_suffix
+    FROM user
+    WHERE campus_id LIKE CONCAT(prefix_id, '%');
+    
+    SET NEW.campus_id = CONCAT(prefix_id, max_suffix+1);
+    SET NEW.campus_email = CONCAT(prefix_id, max_suffix+1, "@wsc.edu");
     
     SET NEW.created = NOW();
     SET NEW.updated = NOW();
     
     SET NEW.created_userid = CURRENT_USER();
     SET NEW.updated_userid = CURRENT_USER();
-	
-    SELECT MAX(CAST(SUBSTRING(campus_id, LENGTH(prefix_id)+1, 1) AS UNSIGNED))
-    INTO max_suffix
-    FROM user
-    WHERE campus_id LIKE CONCAT(prefix_id, '%');
     
 END//
 
