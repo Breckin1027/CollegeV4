@@ -78,7 +78,8 @@ CREATE TRIGGER campus_id_after_insert
 	AFTER INSERT ON user
     FOR EACH ROW
 BEGIN
-	
+	INSERT INTO audit_campus_id (user_id, old_campus_id, new_campus_id, old_campus_email, new_campus_email, changed_by, changed_at)
+    VALUES (NEW.user_id, NULL, NEW.campus_id, NULL, NEW.campus_email,USER(), NOW());
 END //
 
 
@@ -86,5 +87,5 @@ CREATE TRIGGER campus_id_after_update
 	AFTER UPDATE ON user
     FOR EACH ROW
 BEGIN 
-
+	
 END //
