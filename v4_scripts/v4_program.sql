@@ -85,3 +85,11 @@ BEGIN
     (user_id, old_campus_id, new_campus_id, old_campus_email, new_campus_email, 
     CURRENT_USER(), NOW());
 END //
+
+CREATE EVENT one_time_delete_audit_rows
+ON SCHEDULE AT NOW() + INTERVAL 1 MONTH
+DO BEGIN
+  DELETE FROM audit_campus_id WHERE changed_at < NOW() - INTERVAL 1 MONTH LIMIT 100;
+END//
+
+DELIMITER ;
